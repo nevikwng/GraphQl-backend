@@ -99,13 +99,28 @@ const Getcheckoutpage = async (req) => {
   const output = {
     rows: [],
   };
-  const sql = "SELECT * FROM `checkoutpage`";
+  const sql = "SELECT * FROM `orders`";
   const [r2] = await db.query(sql);
-  if (r2) output.rows = JSON.stringify(r2);
+  if (r2) output.rows = r2
   // console.log(output.rows)
 
   return output.rows;
 };
+
+
+const inserorders = async (req) => {
+  const res = JSON.parse(JSON.stringify(req))
+  console.log(req)
+  const output = {
+    rows: [],
+  };
+  const sql = "INSERT INTO `orders` set ?"
+  const [r2] = await db.query(sql, [req]);
+  if (r2) output.rows = r2
+  // console.log(output.rows)
+  return output.rows;
+};
+
 
 // 定義從伺服器獲取資料的graphql方法
 const typeDefs = gql`
@@ -131,6 +146,20 @@ const typeDefs = gql`
     test:[some]!
     sql:[some]!
   }
+
+
+
+  type updateResponse {
+    success: Boolean!
+    todoList:[todo]!
+  }
+  type Mutation {
+    addTodo(content: String): updateResponse!
+  }
+
+
+
+
 `;
 const resolvers = {
   Query: {
@@ -138,8 +167,8 @@ const resolvers = {
     test: () => test,
     sql: async function () {
       let res = await Getcheckoutpage();
-      res = JSON.parse((res));
-      console.log("res", res)
+      res = JSON.parse(res);
+      // console.log("res", res)
       return res;
     }
   }
@@ -161,25 +190,42 @@ type some {
 }
 
 type sqlcontent{
-  sld:ID
-  UserName:String
-  MemberId:ID
+  orderId:ID!
+  Total:String!
+  MemberId:ID!
 }
 
 type Query {
   todoList: [todo]!
   test:[some]!
   sql:[sqlcontent]!
-} `)
 
+}
+
+type updateResponse {
+  success: Boolean!
+  todoList:[todo]!
+  sql:[sqlcontent]!
+
+}
+type Mutation {
+  addTodo(MemberId:String,Total:String): updateResponse!
+}
+
+ `)
+  
 var root = {
   todoList: () => data,
   sql: async function () {
-    var result = await createCourseQuery();
-    result = JSON.parse(JSON.stringify(result));
-    console.log("coursecoursecoursecourse")
-    console.log(result[0])
-    return result[0]
+    const result = await Getcheckoutpage();
+    return result
+  },
+  addTodo: async ({ MemberId, Total }) => {
+    console.log(MemberId, Total);
+    const info = { MemberId, Total }
+    const res = await inserorders(info)
+    const data = await Getcheckoutpage();
+    return { success: true, sql: data };
   },
 }
 

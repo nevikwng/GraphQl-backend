@@ -1,0 +1,32 @@
+{
+  "name": "gql-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "apollo-server-koa": "^2.17.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express-graphql": "^0.11.0",
+    "express-session": "^1.17.1",
+    "express": "^4.17.1",
+    "koa": "^2.13.0",
+    "moment-timezone": "^0.5.31",
+    "mysql2": "^2.1.0",
+    "nodemon": "^2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nevikwng/GraphQl-backend.git"
+  },
+  "author": "daren",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nevikwng/GraphQl-backend/issues"
+  },
+  "homepage": "https://github.com/nevikwng/GraphQl-backend#readme"
+}
